@@ -1,4 +1,4 @@
-import { resolve as resolvePath } from "https://deno.land/std/path/mod.ts";
+import { resolve as resolvePath } from "https://deno.land/std@0.214.0/path/mod.ts";
 const supportedCompressionFormats = ["deflate", "gzip", "deflate-raw"] as const;
 
 type CompressionFormat = (typeof supportedCompressionFormats)[number];

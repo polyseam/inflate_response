@@ -1,6 +1,6 @@
 import { inflateResponse } from "../mod.ts";
-import { assertEquals } from "https://deno.land/std/assert/assert_equals.ts";
-import { resolve as resolvePath } from "https://deno.land/std/path/mod.ts";
+import { assertEquals } from "https://deno.land/std@0.214.0/assert/assert_equals.ts";
+import { resolve as resolvePath } from "https://deno.land/std@0.214.0/path/mod.ts";
 
 // correct content is "hello world"
 const pathToCorrect = resolvePath("./test/output/correct.txt");
