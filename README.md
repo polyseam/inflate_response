@@ -13,5 +13,7 @@ import { inflateResponse } from "https://deno.land/x/inflate_response/mod.ts";
 const myGzippedContent = await fetch(
   "https://example.com/some-gzipped-content.txt.gz",
 );
+
+// this will save the uncompressed or "inflated" content to a file named `some-gzipped-content.txt`
 await inflateResponse(myGzippedContent, "./some-gzipped-content.txt");
 ```
