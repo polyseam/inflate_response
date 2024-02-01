@@ -1,4 +1,4 @@
-# inflate-response
+# inflate_response
 
 This module leverages the
 [Compression Streams API](https://deno.land/api?s=DecompressionStream) to

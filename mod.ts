@@ -1,1 +1,1 @@
-export * from "./inflate-response.ts";
+export * from "./inflate_response.ts";
