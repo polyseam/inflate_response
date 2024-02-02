@@ -13,8 +13,41 @@ Deno.test(async function inflateGZipTest() {
   const inflateDestination = "./test/output/hello-world-gzip.txt";
   await inflateResponse(response, inflateDestination, "gzip");
   const inflatedContents = Deno.readTextFileSync(
-    resolvePath(inflateDestination),
+    resolvePath(inflateDestination)
   );
   assertEquals(inflatedContents, correctContents);
   Deno.removeSync(resolvePath(inflateDestination));
+});
+
+// contents are "hello world a" and "hello world b"
+// in "./hello-worlds/hello-world-a.txt" and "./hello-worlds/hello-world-b.txt"
+Deno.test(async function inflateTarGZipTest() {
+  const filesToCheck = [
+    {
+      name: "hello-world-a.txt",
+      contents: "hello world a",
+    },
+    {
+      name: "hello-world-b.txt",
+      contents: "hello world b",
+    },
+  ];
+
+  const pathToInput = resolvePath("./test/input/hello-worlds.tar.gz");
+  const response = await fetch(`file://${pathToInput}`);
+  const inflateDestination = "./test/output/hello-worlds";
+  await inflateResponse(response, inflateDestination, "gzip", true);
+  for (const dirEntry of Deno.readDirSync(inflateDestination)) {
+    const fileIdx = filesToCheck.findIndex((fileToCheck) => {
+      return fileToCheck.name === dirEntry.name;
+    });
+    assertEquals(
+      filesToCheck[fileIdx].contents,
+      Deno.readTextFileSync(
+        resolvePath(`${inflateDestination}/${dirEntry.name}`)
+      )
+    );
+  }
+  Deno.removeSync(resolvePath(inflateDestination), { recursive: true });
+  Deno.removeSync(resolvePath(inflateDestination + ".tar"));
 });
