@@ -9,12 +9,18 @@ const supportedCompressionFormats = ["deflate", "gzip", "deflate-raw"] as const;
 
 type CompressionFormat = (typeof supportedCompressionFormats)[number];
 
+type InflateResponseOptions = {
+  compressionFormat?: CompressionFormat;
+  doUntar?: boolean;
+};
+
 export async function inflateResponse(
   response: Response,
   inflateDestination: string,
-  compressionFormat: CompressionFormat = "gzip",
-  doUntar = false,
+  options?: InflateResponseOptions,
 ) {
+  const { compressionFormat = "gzip", doUntar = false } = options || {};
+
   if (!supportedCompressionFormats.includes(compressionFormat)) {
     throw new Error(`Unsupported compression format: "${compressionFormat}"`);
   }

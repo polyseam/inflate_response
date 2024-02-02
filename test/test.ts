@@ -11,9 +11,13 @@ Deno.test(async function inflateGZipTest() {
   const pathToInput = resolvePath("./test/input/hello-world.gz");
   const response = await fetch(`file://${pathToInput}`);
   const inflateDestination = "./test/output/hello-world-gzip.txt";
-  await inflateResponse(response, inflateDestination, "gzip");
+
+  await inflateResponse(response, inflateDestination, {
+    compressionFormat: "gzip",
+  });
+
   const inflatedContents = Deno.readTextFileSync(
-    resolvePath(inflateDestination)
+    resolvePath(inflateDestination),
   );
   assertEquals(inflatedContents, correctContents);
   Deno.removeSync(resolvePath(inflateDestination));
@@ -36,7 +40,10 @@ Deno.test(async function inflateTarGZipTest() {
   const pathToInput = resolvePath("./test/input/hello-worlds.tar.gz");
   const response = await fetch(`file://${pathToInput}`);
   const inflateDestination = "./test/output/hello-worlds";
-  await inflateResponse(response, inflateDestination, "gzip", true);
+  await inflateResponse(response, inflateDestination, {
+    compressionFormat: "gzip",
+    doUntar: true,
+  });
   for (const dirEntry of Deno.readDirSync(inflateDestination)) {
     const fileIdx = filesToCheck.findIndex((fileToCheck) => {
       return fileToCheck.name === dirEntry.name;
@@ -44,8 +51,8 @@ Deno.test(async function inflateTarGZipTest() {
     assertEquals(
       filesToCheck[fileIdx].contents,
       Deno.readTextFileSync(
-        resolvePath(`${inflateDestination}/${dirEntry.name}`)
-      )
+        resolvePath(`${inflateDestination}/${dirEntry.name}`),
+      ),
     );
   }
   Deno.removeSync(resolvePath(inflateDestination), { recursive: true });
