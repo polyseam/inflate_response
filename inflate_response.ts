@@ -1,9 +1,9 @@
-import { resolve as resolvePath } from "https://deno.land/std@0.214.0/path/mod.ts";
-import { Untar } from "https://deno.land/std@0.214.0/archive/untar.ts";
-import { ensureFile } from "https://deno.land/std@0.214.0/fs/ensure_file.ts";
-import { ensureDir } from "https://deno.land/std@0.214.0/fs/ensure_dir.ts";
-import { copy } from "https://deno.land/std@0.214.0/io/copy.ts";
-import * as path from "https://deno.land/std@0.214.0/path/mod.ts";
+import { resolve as resolvePath } from "@std/path";
+import { Untar } from "@std/archive/untar";
+import { ensureFile } from "@std/fs/ensure_file";
+import { ensureDir } from "@std/fs/ensure_dir";
+import { copy } from "@std/io/copy";
+import * as path from "@std/path";
 
 const supportedCompressionFormats = ["deflate", "gzip", "deflate-raw"] as const;
 
