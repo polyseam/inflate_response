@@ -1,8 +1,9 @@
 {
-  "name":"@polyseam/inflate_response",
-  "version":"1.1.0",
+  "name": "@polyseam/inflate_response",
+  "version": "1.1.0",
   "tasks": {
     "dev": "deno run --watch main.ts",
     "test": "deno test -A"
-  }
+  },
+  "exports": "./mod.ts"
 }
