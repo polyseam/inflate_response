@@ -1,10 +1,9 @@
 import { inflateResponse } from "../mod.ts";
-import { assertEquals } from "@std/assert/assert_equals";
+import { assertEquals } from "@std/assert";
 import { resolve as resolvePath } from "@std/path";
 
 // correct content is "hello world"
 const pathToCorrect = resolvePath("./test/output/correct.txt");
-console.log("pathToCorrect", pathToCorrect);
 const correctContents = Deno.readTextFileSync(pathToCorrect);
 
 Deno.test(async function inflateGZipTest() {
