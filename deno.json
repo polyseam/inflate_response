@@ -1,11 +1,16 @@
 {
   "name": "@polyseam/inflate-response",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "exports": "./mod.ts",
   "tasks": {
     "dev": "deno run --watch main.ts",
     "test": "deno test -A"
   },
+  "exclude": [
+    "test",
+    ".vscode",
+    ".github"
+  ],
   "imports": {
     "@std/path": "jsr:@std/path@0.214.0",
     "@std/archive": "jsr:@std/archive@0.214.0",
