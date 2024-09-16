@@ -1,8 +1,7 @@
 import { resolve as resolvePath } from "@std/path";
-import { Untar } from "@std/archive/untar";
+import { UntarStream } from "@std/tar/untar-stream";
 import { ensureFile } from "@std/fs/ensure_file";
 import { ensureDir } from "@std/fs/ensure_dir";
-import { copy } from "@std/io/copy";
 import * as path from "@std/path";
 
 const supportedCompressionFormats = ["deflate", "gzip", "deflate-raw"] as const;
@@ -48,21 +47,21 @@ export async function inflateResponse(
     await decompressedStream.pipeTo(inflatedTarball.writable);
 
     using inflatedTarFile = await Deno.open(tarballPath, { read: true });
-    const untar = new Untar(inflatedTarFile);
+    const entries = inflatedTarFile.readable.pipeThrough(new UntarStream());
 
-    for await (const entry of untar) {
-      if (entry.type === "directory") {
-        await ensureDir(entry.fileName);
+    for await (const entry of entries) {
+      if (entry.readable === undefined) {
+        await ensureDir(entry.path);
         continue;
       }
       await ensureDir(inflateDestination);
-      await ensureFile(path.join(inflateDestination, entry.fileName));
+      await ensureFile(path.join(inflateDestination, entry.path));
       using file = await Deno.open(
-        path.join(inflateDestination, entry.fileName),
+        path.join(inflateDestination, entry.path),
         { write: true },
       );
       // <entry> is a reader.
-      await copy(entry, file);
+      await entry.readable.pipeTo(file.writable);
     }
   } else { // single file
     using inflatedFile = await Deno.open(resolvePath(inflateDestination), {
